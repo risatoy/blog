@@ -7,7 +7,8 @@ categories: Flask
 
 This blog details the process of deploying flask app using docker on Google Cloud Platform (Cloud Build, Cloud Container Registry and Cloud Run) with CI/CD pipeline setup.
 
-##### 1) Create app.py
+### Creating Simple Flask App
+##### 1. Create *app.py*
 ```
 from flask import Flask, Response, jsonify, render_template, logging, request
 app = Flask(__name__)
@@ -20,8 +21,8 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
 ```
 
-##### 2) Create index.html inside templates folder
-``` templates/index.html
+##### 2. Create *index.html* inside *templates* folder
+``` html:templates/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,12 +32,12 @@ if __name__ == '__main__':
     <title>Document</title>
 </head>
 <body>
-    <h1>hello world! 2.0</h1>
+    <h1>hello world!</h1>
 </body>
 </html>
 ```
 
-##### 3) Create Dockerfile
+##### 3. Create *Dockerfile*
 ```
 FROM python:3.8
 
@@ -60,50 +61,87 @@ COPY . /app
 ENTRYPOINT ["python", "app.py"]
 ```
 
-##### 4) Create requirements.txt file using ```pip freeze -r > requirements.txt```
+##### 4. Create *requirements.txt* using `pip freeze -r > requirements.txt`
 ```
 Flask==1.1.2
 ```
 
-##### 5) Run ```docker build . ``` to build docker image
+##### 5. Run `docker build . ` to build docker image
 > ``NOTE:`` Install [Docker](https://docs.docker.com/get-docker/) to use docker command
 
-##### 6) Create a new project on GCP
+##### 6. Get IMAGE ID using ```docker images```
+![image](/images/2021101701.png)
 
-##### 7) Create a new repo on Github
+### Setting up GCP and GitHub
+##### 7. Create a new project on GCP
+![image](/images/2021101702.png)
+Fill in **Project name** > Select **Billing account** > **CREATE**
 
-##### 8) Get ImageID using ```docker images```
+##### 8. Create a new repo on Github
+![image](/images/2021101703.png)
+Fill in **Repository name** > **Create repository**
 
-##### 9) ```docker tag <imageid> gcr.io/<gcp-project-id>/<projectname>``` to create a tag to the docker image
+### Uploading Docker image on GCP (Container Registory)
+##### 9. Add a tag to the docker image that you just created `docker tag <imageid> gcr.io/<gcp-project-id>/<projectname>`
+![image](/images/2021101704.png)
 
-##### 10) ```gcloud init``` to check if you are in the right GCP project
+Run `docker images` to check if the image is tagged.
+![image](/images/2021101705.png)
+
+##### 10. Run `gcloud init` to check if you are in the right GCP project
 > ``NOTE:`` Install gcloud to use gcloud command
 
-##### 11) ```gcloud auth configure-docker``` to add credentials
+##### 11. Run `gcloud auth configure-docker` to add credentials
 
-##### 12) Enable Container Registry on GCP
+##### 12. Enable Container Registry on GCP
 
-##### 13) ```docker push gcr.io/<gcp-project-id>/<projectname>``` to push the image that you built to GCP Container Registry
-option: check Container Registry if the image is uploaded
+##### 13. Run `docker push gcr.io/<gcp-project-id>/<projectname>` to push the docker image to GCP Container Registry
+![image](/images/2021101706.png)
+Check **Container Registry** if the image is uploaded
+![image](/images/2021101707.png)
 
-##### 14) Enable Cloud Build on GCP
 
-##### 15) On Cloud Run, Create service -> fill in service name, select region (my preference is us-west1) -> select container image (latest) -> allow unauthenticated invocations -> create
+##### 14. Enable Cloud Build on GCP
 
-##### 16) On Cloud Run, Click "Edit & Deploy new revision" -> change the port number to 80 -> change autoscaling to maximum 1 -> deploy
-option: When green icon appears, access the website from the url
+##### 15. Go to Cloud Run, Create service
+![image](/images/2021101708.png)
+![image](/images/2021101709.png)
+Select **Container image** (select latest) >Fill in **Service name** > Select **Region** (my preference is us-west1) > Under Authentication, Select **Allow unauthenticated invocations** > **Create**
+
+##### 16. Click Edit & Deploy new revision
+![image](/images/2021101710.png)
+**Container** tab > Change **Container port** to 80 > Under Autoscaling, change **maximum** to 1 > **Deploy**
+When Green icon appears, Access the website from the url on Cloud Run
+You will see something like this!
+![image](/images/2021101713.png)
 
 ### Setting Up Continuous Deployment
 
-##### 17) Create cloudbuild.yaml (reference: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#building_and_deploying_a_container)
-option: change title on index.html
+##### 17. Create *cloudbuild.yaml* 
+(Reference: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#building_and_deploying_a_container)
+![image](/images/2021101711.png)
+Update and add `'--region', 'us-west1', '--platform', 'managed', '--port', '80'` to args for Cloud Run
+Option: Change title on index.html to see the chagne later
 
-##### 18) Push to GitHub
+##### 18. Push the file to GitHub
+> git init
+git remote add origin your-repo-url
+git  add .
+git commit -m "first commit"
+git push origin master
 
-##### 19) GCP -> Cloud Build -> Create trigger -> filled in name "<your-app-name>-trigger" -> source repositry, select github repo -> Configuration, select Cloud Build configuration file -> create
-  <- this trigger is listening for any time that we make a commit to the github repo
-     option: try "run" -> check build history -> when failed, go to settings > enable cloud run admin and service accounts -> go back to triggers -> run again
 
-##### 20) Check the url if its update is made!
+##### 19. Go to Cloud Build, Create Trigger from Triggers tab
+
+Fill in **Name** > Under Source **Repositry**, Select your Github Repo > Under Configuration **Type**, Select **Cloud Build configuration file** > **Create**
+
+This trigger is listening for any time that we make a commit to the Github Repo.
+
+Option: Try **RUN** > **Run Trigger** > Check **History** tab > When it failed, Go to **Settings** tab > Enable **Cloud run admin** and **service accounts** > Go back to **Triggers** > **RUN** again
+![image](/images/2021101712.png)
+
+
+##### 20. Check out the url if its update is made!
+
 
 
