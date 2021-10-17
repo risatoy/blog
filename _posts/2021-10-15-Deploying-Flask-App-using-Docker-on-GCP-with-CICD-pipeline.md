@@ -70,23 +70,23 @@ Flask==1.1.2
 > ``NOTE:`` Install [Docker](https://docs.docker.com/get-docker/) to use docker command
 
 ##### 6. Get IMAGE ID using ```docker images```
-![image](/assets/images/2021101701.png)
+![image](/blog/assets/images/2021101701.png)
 
 ### Setting up GCP and GitHub
 ##### 7. Create a new project on GCP
-![image](/assets/images/2021101702.png)
+![image](/blog/assets/images/2021101702.png)
 Fill in **Project name** > Select **Billing account** > **CREATE**
 
 ##### 8. Create a new repo on Github
-![image](/assets/images/2021101703.png)
+![image](/blog/assets/images/2021101703.png)
 Fill in **Repository name** > **Create repository**
 
 ### Uploading Docker image on GCP (Container Registory)
 ##### 9. Add a tag to the docker image that you just created `docker tag <imageid> gcr.io/<gcp-project-id>/<projectname>`
-![image](/assets/images/2021101704.png)
+![image](/blog/assets/images/2021101704.png)
 
 Run `docker images` to check if the image is tagged.
-![image](/assets/images/2021101705.png)
+![image](/blog/assets/images/2021101705.png)
 
 ##### 10. Run `gcloud init` to check if you are in the right GCP project
 > ``NOTE:`` Install gcloud to use gcloud command
@@ -96,30 +96,30 @@ Run `docker images` to check if the image is tagged.
 ##### 12. Enable Container Registry on GCP
 
 ##### 13. Run `docker push gcr.io/<gcp-project-id>/<projectname>` to push the docker image to GCP Container Registry
-![image](/assets/images/2021101706.png)
+![image](/blog/assets/images/2021101706.png)
 Check **Container Registry** if the image is uploaded
-![image](/assets/images/2021101707.png)
+![image](/blog/assets/images/2021101707.png)
 
 
 ##### 14. Enable Cloud Build on GCP
 
 ##### 15. Go to Cloud Run, Create service
-![image](/assets/images/2021101708.png)
-![image](/assets/images/2021101709.png)
+![image](/blog/assets/images/2021101708.png)
+![image](/blog/assets/images/2021101709.png)
 Select **Container image** (select latest) >Fill in **Service name** > Select **Region** (my preference is us-west1) > Under Authentication, Select **Allow unauthenticated invocations** > **Create**
 
 ##### 16. Click Edit & Deploy new revision
-![image](/assets/images/2021101710.png)
+![image](/blog/assets/images/2021101710.png)
 **Container** tab > Change **Container port** to 80 > Under Autoscaling, change **maximum** to 1 > **Deploy**
 When Green icon appears, Access the website from the url on Cloud Run
 You will see something like this!
-![image](/assets/images/2021101713.png)
+![image](/blog/assets/images/2021101713.png)
 
 ### Setting Up Continuous Deployment
 
 ##### 17. Create *cloudbuild.yaml* 
 (Reference: https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#building_and_deploying_a_container)
-![image](/assets/images/2021101711.png)
+![image](/blog/assets/images/2021101711.png)
 Update and add `'--region', 'us-west1', '--platform', 'managed', '--port', '80'` to args for Cloud Run
 Option: Change title on index.html to see the chagne later
 
@@ -138,7 +138,7 @@ Fill in **Name** > Under Source **Repositry**, Select your Github Repo > Under C
 This trigger is listening for any time that we make a commit to the Github Repo.
 
 Option: Try **RUN** > **Run Trigger** > Check **History** tab > When it failed, Go to **Settings** tab > Enable **Cloud run admin** and **service accounts** > Go back to **Triggers** > **RUN** again
-![image](/assets/images/2021101712.png)
+![image](/blog/assets/images/2021101712.png)
 
 
 ##### 20. Check out the url if its update is made!
