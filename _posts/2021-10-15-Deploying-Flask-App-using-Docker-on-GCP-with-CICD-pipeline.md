@@ -113,6 +113,7 @@ Select **Container image** (select latest) >Fill in **Service name** > Select **
 **Container** tab > Change **Container port** to 80 > Under Autoscaling, change **maximum** to 1 > **Deploy**
 When Green icon appears, Access the website from the url on Cloud Run
 You will see something like this!
+
 ![image](/blog/assets/images/2021101713.png)
 
 ### Setting Up Continuous Deployment
@@ -125,10 +126,14 @@ Option: Change title on index.html to see the chagne later
 
 ##### 18. Push the file to GitHub
 > git init
-git remote add origin your-repo-url
-git  add .
-git commit -m "first commit"
-git push origin master
+
+> git remote add origin your-repo-url
+
+> git  add .
+
+> git commit -m "first commit"
+
+> git push origin master
 
 
 ##### 19. Go to Cloud Build, Create Trigger from Triggers tab
