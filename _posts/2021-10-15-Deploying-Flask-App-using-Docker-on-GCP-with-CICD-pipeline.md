@@ -3,6 +3,7 @@ layout: post
 title:  "Deploying Flask App using Docker on Google Cloud Platform with CI/CD pipeline"
 date:   2021-10-15 23:30:00 +0900
 categories: Flask
+background: /assets/images/header.jpg
 ---
 
 This blog details the process of deploying flask app using docker on Google Cloud Platform (Cloud Build, Cloud Container Registry and Cloud Run) with CI/CD pipeline setup.
