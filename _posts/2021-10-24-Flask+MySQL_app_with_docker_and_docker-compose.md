@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Flask+MySQL app with Docker and docker-compose"
-date:   2021-10-25 00:09:00 +0900
+date:   2021-10-24 00:09:00 +0900
 categories: Flask
 customjs:
  - http://code.jquery.com/jquery-1.4.2.min.js
@@ -10,8 +10,8 @@ customjs:
 
 This blog details the process of creating simple Flask with MySQL app using Docker and docker-compose.
 
-#### How the app looks like at the end
-![image](/blog/assets/images/2021102501.png)
+#### What the app looks like at the end
+![image](/blog/assets/images/2021102401.png)
 
 #### Final File Strucutre
 ```
@@ -192,7 +192,7 @@ def index():
 
 #### 13. now add a page to show name and email info
 create users.html insdie templates folder
-![image](/blog/assets/images/2021102502.png)
+![image](/blog/assets/images/2021102402.png)
 
 
 add /users route in app.py
